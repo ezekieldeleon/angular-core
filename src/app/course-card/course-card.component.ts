@@ -30,4 +30,8 @@ export class CourseCardComponent {
       return "beignner";
     }
   }
+
+  cardStyles() {
+    return { "text-decoration": "underline" };
+  }
 }
