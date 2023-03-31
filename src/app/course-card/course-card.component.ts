@@ -1,14 +1,30 @@
-import { Component, EventEmitter, Input, Output } from "@angular/core";
+import {
+  AfterContentInit,
+  AfterViewInit,
+  Component,
+  ContentChildren,
+  ElementRef,
+  EventEmitter,
+  Input,
+  Output,
+  QueryList,
+  TemplateRef,
+  ViewChild,
+} from "@angular/core";
 import { Course } from "../model/course";
+import { CourseImageComponent } from "../course-image/course-image.component";
 
 @Component({
   selector: "course-card",
   templateUrl: "./course-card.component.html",
   styleUrls: ["./course-card.component.css"],
 })
-export class CourseCardComponent {
+export class CourseCardComponent implements AfterViewInit, AfterContentInit {
   @Input()
   course: Course;
+
+  @Input()
+  noImageTpl: TemplateRef<any>;
 
   @Input()
   cardIndex: number;
@@ -16,8 +32,16 @@ export class CourseCardComponent {
   @Output("courseSelected")
   courseEmitter = new EventEmitter<Course>();
 
+  @ContentChildren(CourseImageComponent, { read: ElementRef })
+  images: QueryList<ElementRef>;
+
+  ngAfterViewInit(): void {}
+
+  ngAfterContentInit(): void {
+    console.log(this.images);
+  }
+
   onCourseViewed() {
-    console.log("card component - button clicked ....");
     this.courseEmitter.emit(this.course);
   }
 
