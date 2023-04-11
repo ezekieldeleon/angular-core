@@ -5,6 +5,7 @@ import {
   Inject,
   InjectionToken,
   OnInit,
+  Optional,
   QueryList,
   ViewChild,
   ViewChildren,
@@ -16,6 +17,7 @@ import { HighlightedDirective } from "./directives/highlighted.directive";
 import { Observable } from "rxjs";
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { CoursesService } from "./services/courses.service";
+import { APP_CONFIG, AppConfig, CONFIG_TOKEN } from "./config";
 
 function coursesServiceProvided(http: HttpClient): CoursesService {
   return new CoursesService(http);
@@ -29,24 +31,18 @@ export const COURSES_SERVICE = new InjectionToken<CoursesService>(
   selector: "app-root",
   templateUrl: "./app.component.html",
   styleUrls: ["./app.component.css"],
-  providers: [
-    {
-      provide: COURSES_SERVICE,
-      useFactory: coursesServiceProvided,
-      deps: [HttpClient],
-    },
-  ],
+  providers: [CoursesService],
 })
 export class AppComponent implements OnInit {
+  courses = COURSES;
   courses$: Observable<Course[]>;
 
   constructor(
-    @Inject(COURSES_SERVICE) private coursesService: CoursesService
+    private coursesService: CoursesService,
+    @Inject(CONFIG_TOKEN) private config: AppConfig
   ) {}
 
-  ngOnInit() {
-    this.courses$ = this.coursesService.loadCourses();
-  }
+  ngOnInit() {}
 
   save(course: Course) {
     this.coursesService

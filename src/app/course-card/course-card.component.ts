@@ -10,6 +10,8 @@ import {
   OnInit,
   Output,
   QueryList,
+  Self,
+  SkipSelf,
   ViewEncapsulation,
 } from "@angular/core";
 import { Course } from "../model/course";
@@ -32,13 +34,15 @@ export class CourseCardComponent implements OnInit {
   @Output("courseChanged")
   courseEmitter = new EventEmitter<Course>();
 
-  constructor(
-    @Inject(COURSES_SERVICE) private coursesService: CoursesService
-  ) {}
+  constructor(private coursesService: CoursesService) {}
 
   ngOnInit() {}
 
   onSaveClicked(description: string) {
     this.courseEmitter.emit({ ...this.course, description });
+  }
+
+  onTitleChange(newTitle: string) {
+    this.course.description = newTitle;
   }
 }

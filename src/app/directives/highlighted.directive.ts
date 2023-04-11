@@ -1,48 +1,51 @@
-import {Directive, EventEmitter, HostBinding, HostListener, Input, Output} from '@angular/core';
+import {
+  Directive,
+  EventEmitter,
+  Host,
+  HostBinding,
+  HostListener,
+  Input,
+  Output,
+} from "@angular/core";
+import { CoursesService } from "../services/courses.service";
 
 @Directive({
-    selector: '[highlighted]',
-    exportAs: 'hl'
+  selector: "[highlighted]",
+  exportAs: "hl",
 })
 export class HighlightedDirective {
+  @Input("highlighted")
+  isHighlighted = false;
 
-    @Input('highlighted')
-    isHighlighted = false;
+  @Output()
+  toggleHighlight = new EventEmitter();
 
-    @Output()
-    toggleHighlight = new EventEmitter();
+  constructor(private coursesService: CoursesService) {
+    console.log("Directive created..");
+    console.log("courses Service Highlighted: ", coursesService.id);
+  }
 
-    constructor() {
+  @HostBinding("class.highlighted")
+  get cssClasses() {
+    return this.isHighlighted;
+  }
 
-        console.log('Directive created..');
+  @HostListener("mouseover", ["$event"])
+  mouseOver($event) {
+    console.log($event);
 
-    }
+    this.isHighlighted = true;
+    this.toggleHighlight.emit(this.isHighlighted);
+  }
 
-    @HostBinding('class.highlighted')
-    get cssClasses() {
-        return this.isHighlighted;
-    }
+  @HostListener("mouseleave")
+  mouseLeave() {
+    this.isHighlighted = false;
+    this.toggleHighlight.emit(this.isHighlighted);
+  }
 
-    @HostListener('mouseover', ['$event'])
-    mouseOver($event) {
-
-        console.log($event);
-
-        this.isHighlighted = true;
-        this.toggleHighlight.emit(this.isHighlighted);
-    }
-
-    @HostListener('mouseleave')
-    mouseLeave() {
-        this.isHighlighted = false;
-        this.toggleHighlight.emit(this.isHighlighted);
-    }
-
-    toggle() {
-        this.isHighlighted = !this.isHighlighted;
-        this.toggleHighlight.emit(this.isHighlighted);
-    }
-
-
-
+  toggle() {
+    this.isHighlighted = !this.isHighlighted;
+    this.toggleHighlight.emit(this.isHighlighted);
+  }
 }
