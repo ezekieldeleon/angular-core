@@ -1,6 +1,9 @@
 import {
   AfterViewInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
+  DoCheck,
   ElementRef,
   Inject,
   InjectionToken,
@@ -34,15 +37,25 @@ export const COURSES_SERVICE = new InjectionToken<CoursesService>(
   providers: [CoursesService],
 })
 export class AppComponent implements OnInit {
-  courses = COURSES;
-  courses$: Observable<Course[]>;
+  courses: Course[] = COURSES;
+  // courses$: Observable<Course[]>;
 
   constructor(
     private coursesService: CoursesService,
     @Inject(CONFIG_TOKEN) private config: AppConfig
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    // this.coursesService.loadCourses().subscribe((course) => {
+    //   this.courses = course;
+    // });
+    // this.courses$ = this.coursesService.loadCourses();
+  }
+  onEditCourse() {
+    const course = this.courses[0];
+    const newCourse = { ...course, description: "ngOnChanges" };
+    this.courses[0] = newCourse;
+  }
 
   save(course: Course) {
     this.coursesService
