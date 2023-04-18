@@ -36,6 +36,7 @@ export const COURSES_SERVICE = new InjectionToken<CoursesService>(
 export class AppComponent implements OnInit {
   courses: Course[] = COURSES;
   // courses$: Observable<Course[]>;
+  coursesTotal = this.courses.length;
 
   constructor(
     private coursesService: CoursesService,
@@ -49,9 +50,10 @@ export class AppComponent implements OnInit {
     // this.courses$ = this.coursesService.loadCourses();
   }
   onEditCourse() {
-    const course = this.courses[0];
-    const newCourse = { ...course, description: "ngOnChanges" };
-    this.courses[0] = newCourse;
+    this.courses[1].category = "ADVANCED";
+    // const course = this.courses[0];
+    // const newCourse = { ...course, description: "ngOnChanges" };
+    // this.courses[0] = newCourse;
   }
 
   save(course: Course) {
